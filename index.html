@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLACK ROOM — антикинотеатр в Твери. 13 залов, только для вашей компании</title>
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<meta name="description" content="Антикинотеатр BLACK ROOM в Твери: персональные залы с большим экраном, караоке, приставками и бесплатным чаем и кофе. От 270 ₽ в час с человека.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ токены ============ */
+:root{
+  --black:#0b0a08;        /* зал до начала сеанса — тёплый полумрак */
+  --surface:#131210;      /* тьма с тёплым оттенком */
+  --surface-2:#1b1915;
+  --ink:#f0ede4;          /* свет на экране */
+  --dim:#9a958a;          /* затемнение */
+  --beam:#ff8d00;         /* фирменный янтарь из лого */
+  --coral:#ff643f;        /* коралл — ховеры, тепло */
+  --violet:#a34d99;       /* фиолет лого — живые детали */
+  --beam-ink:#1a1206;     /* текст на янтарном поле */
+  --line:rgba(240,237,228,.13);
+  --r:8px;                /* минимальное скругление контролов */
+  --r-big:12px;           /* скругление контейнеров */
+  --display:"Inter",sans-serif;
+  --text:"Inter",sans-serif;
+  --pad:clamp(20px,4.5vw,56px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--black);
+  color:var(--ink);
+  font-family:var(--text);
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--beam);outline-offset:3px}
+::selection{background:var(--beam);color:#1a1206}
+
+.wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad)}
+
+/* ============ шапка-облачко ============ */
+.top{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  transition:transform .35s ease;
+}
+.top-in{
+  display:flex;align-items:center;gap:20px;
+  min-height:76px;
+  max-width:1140px;margin:0 auto;padding:0 var(--pad);
+  transition:min-height .3s ease, background .3s ease, margin .3s ease,
+    padding .3s ease, border-radius .3s ease, box-shadow .3s ease;
+}
+/* на баннере — прозрачная, часть баннера */
+.top.at-top .top-in{min-height:88px}
+.top.at-top .btn{padding:10px 20px;font-size:14.5px}
+/* при скролле — плавающее облачко */
+.top.pill .top-in{
+  min-height:58px;
+  margin-top:14px;
+  padding:0 16px;
+  border-radius:999px;
+  background:rgba(19,18,16,.78);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
+}
+/* внутри облачка — компактнее и спокойнее */
+.top.pill .brand{font-size:13.5px;gap:8px}
+.top.pill .brand-mark{width:20px;height:18px}
+.top.pill .top-nav{gap:2px}
+.top.pill .top-nav a{font-size:13.5px;padding:6px 12px}
+.top.pill .top-phone{margin-left:auto;font-size:13.5px;font-weight:500;color:var(--dim)}
+.top.pill .top-phone:hover{color:var(--ink)}
+.top.pill .btn{padding:8px 16px;font-size:13.5px}
+.brand{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--display);font-weight:700;font-size:15px;
+  letter-spacing:.04em;white-space:nowrap;text-decoration:none;
+}
+.brand-mark{display:block;transition:transform .3s}
+.brand:hover .brand-mark{transform:rotate(-8deg)}
+.brand-text em{font-style:normal;color:var(--beam)}
+.top-nav{display:flex;gap:4px;flex:1;justify-content:center}
+.top-nav a{
+  font-size:14.5px;color:var(--dim);text-decoration:none;
+  padding:8px 14px;border-radius:999px;transition:.15s;
+}
+.top-nav a:hover{color:var(--ink);background:rgba(240,237,228,.08)}
+.top-nav a:focus-visible{outline-offset:-2px}
+.top-phone{font-weight:600;text-decoration:none;white-space:nowrap;font-size:15px}
+.top-phone:hover{color:var(--beam)}
+.btn{
+  display:inline-block;border:0;cursor:pointer;text-decoration:none;
+  font-family:var(--text);font-weight:600;font-size:15px;
+  padding:11px 22px;border-radius:var(--r);
+  background:var(--beam);color:var(--beam-ink);
+  transition:background .18s, transform .12s;
+}
+.btn:hover{background:var(--coral)}
+.btn:active{transform:scale(.98)}
+.btn-ghost{background:rgba(240,237,228,.1);color:var(--ink)}
+.btn-ghost:hover{background:rgba(240,237,228,.16)}
+@media(max-width:960px){.top-nav{display:none}}
+@media(max-width:520px){.top-phone{display:none}.top-in{justify-content:space-between}}
+@media(prefers-reduced-motion:reduce){.top,.top-in{transition:none}}
+
+/* ============ шапка-баннер ============ */
+.banner{
+  position:relative;
+  min-height:92vh;min-height:92svh;
+  max-height:1000px;
+  display:flex;align-items:center;
+  background:#000;overflow:hidden;
+}
+.banner-bg{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;
+  filter:brightness(.5) saturate(.9);
+}
+.banner::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(11,10,8,.55),rgba(11,10,8,.15) 45%,rgba(11,10,8,.92));
+}
+.banner-in{position:relative;z-index:1;width:100%;padding-top:120px;padding-bottom:56px}
+.banner h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(40px,8vw,110px);
+  line-height:1.02;letter-spacing:.02em;
+  text-shadow:0 2px 40px rgba(0,0,0,.6);
+}
+.banner h1 em{font-style:normal;color:var(--beam)}
+.banner-sub{
+  max-width:52ch;margin-top:24px;
+  font-size:clamp(16px,1.8vw,20px);color:var(--ink);
+  text-shadow:0 1px 20px rgba(0,0,0,.7);
+}
+.banner-sub strong{font-weight:600}
+.banner-cta{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+.banner-note{margin-top:28px;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:10px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--violet);flex:none;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.banner-fact{
+  position:absolute;z-index:1;right:0;bottom:0;left:0;
+}
+.banner-fact-in{
+  display:flex;gap:32px;flex-wrap:wrap;
+  padding-top:18px;padding-bottom:18px;
+  font-size:14px;color:var(--dim);
+}
+.banner-fact b{color:var(--ink);font-weight:500}
+@media(max-width:640px){.banner-fact{display:none}}
+
+.lit .banner h1,.lit .banner-sub,.lit .banner-cta,.lit .banner-note{animation:reveal .8s .25s ease-out backwards}
+@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ============ афишная строка ============ */
+.ticker{
+  background:var(--beam);color:var(--beam-ink);
+  overflow:hidden;white-space:nowrap;
+  padding:13px 0;
+}
+.ticker-track{display:inline-block;animation:tick 30s linear infinite}
+.ticker span{
+  font-weight:600;font-size:15px;text-transform:uppercase;
+  letter-spacing:.02em;padding:0 16px;
+}
+.ticker i{font-style:normal;color:var(--violet)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+
+/* ============ секции ============ */
+section{padding:clamp(96px,13vh,190px) 0}
+section{scroll-margin-top:96px}
+h2{
+  font-family:var(--display);font-weight:500;
+  font-size:clamp(24px,3.4vw,40px);line-height:1.2;
+  margin-bottom:14px;letter-spacing:.01em;
+}
+.lead{max-width:62ch;color:var(--dim);font-size:18px}
+
+/* ============ точки и залы ============ */
+.point-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:40px 0 0}
+.point-tab{
+  cursor:pointer;background:transparent;
+  border:0;border-radius:var(--r);
+  color:var(--dim);font-family:var(--text);font-weight:500;font-size:15px;
+  padding:12px 20px;transition:.18s;
+}
+.point-tab:hover{color:var(--ink);background:rgba(240,237,228,.07)}
+.point-tab[aria-selected="true"]{
+  background:var(--surface-2);color:var(--beam);
+}
+.hall-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+.hall-tab{
+  font-family:var(--display);font-weight:500;font-size:15px;
+  background:transparent;color:var(--dim);cursor:pointer;
+  border:0;border-radius:var(--r);
+  padding:14px 22px;transition:.18s;
+}
+.hall-tab:hover{color:var(--ink);background:rgba(240,237,228,.07)}
+.hall-tab[aria-selected="true"]{
+  background:var(--surface-2);color:var(--beam);
+}
+.hall-panel{
+  display:none;margin-top:28px;
+  background:var(--surface-2);border-radius:var(--r-big);
+  overflow:hidden;
+}
+.hall-panel.active{display:grid;grid-template-columns:minmax(280px,460px) 1fr}
+@media(max-width:800px){.hall-panel.active{grid-template-columns:1fr}}
+.hall-photo{position:relative;min-height:280px;background:#0d0c0a}
+.hall-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.9)}
+.hall-body{padding:clamp(24px,3.5vw,44px)}
+.hall-name{font-family:var(--display);font-weight:500;font-size:22px}
+.hall-facts{display:flex;gap:28px;flex-wrap:wrap;margin:16px 0 20px;color:var(--dim);font-size:15px}
+.hall-facts b{color:var(--ink);font-weight:600;font-size:17px}
+.hall-eq{color:var(--dim);font-size:15.5px;max-width:52ch}
+.hall-prices{margin-top:22px;display:flex;gap:34px;flex-wrap:wrap;align-items:baseline}
+.hall-price b{font-family:var(--display);font-weight:500;font-size:30px;color:var(--beam)}
+.hall-price small{display:block;color:var(--dim);font-size:13px;margin-top:2px}
+.hall-book{margin-top:26px}
+
+/* ============ цены ============ */
+.price-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(28px,5vw,72px);margin-top:40px}
+@media(max-width:840px){.price-grid{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:15.5px}
+caption{text-align:left;color:var(--dim);font-size:14px;padding-bottom:12px;font-weight:500}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--dim);font-weight:500;font-size:13px}
+td b{font-family:var(--display);font-weight:500;font-size:17px;color:var(--beam)}
+.disc{font-size:15.5px;color:var(--dim)}
+.disc li{list-style:none;padding:12px 0;display:flex;gap:14px;align-items:baseline}
+.disc li::before{content:"−";color:var(--beam);font-weight:700;flex:none}
+.disc b{color:var(--ink);font-weight:600}
+.disc-note{margin-top:16px;font-size:14px;color:var(--beam)}
+
+/* ============ поводы: карточки с иконками ============ */
+.field{background:var(--surface)}
+.uses{
+  list-style:none;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+  margin-top:40px;
+}
+.uses li{background:var(--surface-2);border-radius:var(--r-big);padding:22px 20px}
+.uses svg{display:block;width:26px;height:26px;color:var(--ink)}
+.uses h3{font-family:var(--display);font-weight:500;font-size:16.5px;margin-top:16px}
+.uses p{margin-top:6px;font-size:14px;line-height:1.5;color:var(--dim)}
+@media(max-width:900px){.uses{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.uses li{padding:18px 16px}}
+.uses-lead{margin-top:30px;max-width:58ch;font-size:18px;margin-bottom:0}
+.vr-line{margin-top:12px;font-size:15.5px;color:var(--dim)}
+.vr-line b{color:var(--beam);font-weight:600}
+
+/* ============ галерея ============ */
+.gal{margin-top:36px;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:180px;gap:12px}
+.gal-note{margin-top:14px;font-size:14px;color:var(--dim)}
+.gal a{overflow:hidden;background:var(--surface)}
+.gal img{width:100%;height:100%;object-fit:cover;filter:saturate(.85);transition:transform .4s}
+.gal a:hover img{transform:scale(1.04)}
+.gal a:nth-child(1),.gal a:nth-child(6){grid-column:span 2}
+.gal a:nth-child(4){grid-row:span 2}
+@media(max-width:720px){.gal{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px}}
+
+/* ============ бронирование ============ */
+.book .lead{margin-bottom:52px}
+.book-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,88px)}
+@media(max-width:900px){.book-grid{grid-template-columns:1fr;gap:40px}}
+.form-box{
+  background:var(--surface-2);border-radius:var(--r-big);
+  padding:clamp(22px,3vw,36px);
+}
+.book .seg button{background:rgba(240,237,228,.07)}
+.book .seg button:hover{background:rgba(240,237,228,.12)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{
+  cursor:pointer;background:rgba(11,10,8,.35);border:0;border-radius:var(--r);
+  color:var(--dim);font-family:var(--text);font-weight:500;font-size:14.5px;
+  padding:11px 16px;transition:.15s;
+}
+.seg button:hover{color:var(--ink);background:rgba(11,10,8,.55)}
+.seg button[aria-pressed="true"]{background:var(--beam);color:var(--beam-ink)}
+label{display:block;font-size:13.5px;color:var(--dim);margin:20px 0 8px}
+label:first-child{margin-top:0}
+input[type=date],input[type=tel]{
+  width:100%;background:rgba(11,10,8,.35);border:1px solid rgba(240,237,228,.12);border-radius:var(--r);
+  color:var(--ink);font-family:var(--text);font-size:16px;padding:12px 14px;
+}
+input:focus{border-color:var(--beam);outline:none}
+.price-hint{
+  margin-top:24px;
+  font-size:14.5px;color:var(--dim);
+}
+.price-hint b{color:var(--beam);font-weight:600}
+.form-submit{margin-top:24px}
+.form-submit .btn{width:100%}
+.form-fine{margin-top:16px;font-size:12.5px;color:var(--dim)}
+.sent{
+  display:none;margin-top:20px;padding:18px;border-radius:var(--r);
+  background:rgba(255,141,0,.12);font-size:15.5px;
+}
+.sent b{color:var(--beam)}
+.contact-item{background:var(--surface-2);border-radius:var(--r-big);padding:18px 22px;margin-bottom:8px}
+.contact-item h3{font-family:var(--display);font-weight:500;font-size:15px;margin-bottom:6px}
+.contact-item p{color:var(--dim);font-size:15.5px}
+.contact-item a{color:var(--ink);text-decoration:none;font-weight:500}
+.contact-item a:hover{color:var(--beam)}
+
+/* ============ подвал ============ */
+footer{padding:72px 0 40px;font-size:14px;color:var(--dim);overflow:hidden}
+.foot-in{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:baseline;padding:0 var(--pad);max-width:1140px;margin:0 auto}
+footer a{color:var(--dim)}
+footer a:hover{color:var(--ink)}
+.foot-brand{display:inline-flex;align-items:center;gap:9px}
+.foot-mark{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(72px,16vw,240px);
+  line-height:.9;letter-spacing:.01em;
+  color:rgba(240,237,228,.06);
+  margin-top:64px;padding-left:var(--pad);
+  white-space:nowrap;overflow:hidden;
+  user-select:none;
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .lit .banner h1,.lit .banner-sub,.lit .banner-cta,.lit .banner-note{animation:none}
+  .gal img{transition:none}
+  .dot{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top"><img class="brand-mark" src="logo.svg" alt="" width="26" height="23"><span class="brand-text">BLACK<em>&nbsp;ROOM</em></span></a>
+    <nav class="top-nav" aria-label="Меню">
+      <a href="#halls">Залы</a>
+      <a href="#prices">Цены</a>
+      <a href="#uses">Поводы</a>
+      <a href="#gallery">Фото</a>
+    </nav>
+    <a class="top-phone" href="tel:+74822788755">(4822) 788-755</a>
+    <a class="btn" href="#book">Забронировать зал</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ шапка-баннер ============ -->
+  <div class="banner lit" id="banner">
+    <img class="banner-bg" src="https://blackroomclub.ru/wp-content/uploads/2025/09/20250918_194039-scaled.jpg" alt="Зал BLACK ROOM с большим экраном и диванами">
+    <div class="wrap banner-in">
+      <h1>BLACK <em>ROOM</em></h1>
+      <p class="banner-sub">Антикинотеатр в Твери. <strong>Залы, где вас никто не побеспокоит</strong> — кино на большом экране, караоке, приставки и чай с кофе бесплатно. Только вы и ваша компания.</p>
+      <div class="banner-cta">
+        <a class="btn" href="#book">Забронировать зал</a>
+        <a class="btn btn-ghost" href="#halls">Посмотреть залы</a>
+      </div>
+      <p class="banner-note"><span class="dot" aria-hidden="true"></span><span id="openText"></span></p>
+    </div>
+    <div class="banner-fact">
+      <div class="wrap banner-fact-in">
+        <span><b>От 270&nbsp;₽</b> в час с человека</span>
+        <span><b>13 залов</b> на трёх площадках</span>
+        <span><b>Чем дольше и больше компания</b> — тем ниже цена</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Караоке</span><i>✦</i><span>Кино на большом экране</span><i>✦</i><span>PlayStation и Xbox</span><i>✦</i><span>Настольные игры</span><i>✦</i><span>Шлем виртуальной реальности</span><i>✦</i><span>Чай и кофе бесплатно</span><i>✦</i>
+      <span>Караоке</span><i>✦</i><span>Кино на большом экране</span><i>✦</i><span>PlayStation и Xbox</span><i>✦</i><span>Настольные игры</span><i>✦</i><span>Шлем виртуальной реальности</span><i>✦</i><span>Чай и кофе бесплатно</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ============ точки и залы ============ -->
+  <section id="halls" class="field">
+    <div class="wrap">
+      <h2>Выберите точку и зал</h2>
+      <p class="lead">Мы работаем на трёх площадках в Твери — выберите ближайшую, и покажем залы именно этой точки. В любом зале — только ваша компания.</p>
+
+      <div class="point-tabs" role="tablist" aria-label="Точки" id="pointTabs"></div>
+      <div class="hall-tabs" role="tablist" aria-label="Залы точки" id="hallTabs"></div>
+      <div id="hallPanels"></div>
+    </div>
+  </section>
+
+  <!-- ============ цены: янтарное поле ============ -->
+  <section id="prices">
+    <div class="wrap">
+      <h2>Цены и скидки</h2>
+      <p class="lead">Платите только за время в зале. Еду и напитки приносите с собой или заказывайте на месте — чай и кофе всегда бесплатно.</p>
+
+      <div class="price-grid">
+        <table>
+          <caption>Стоимость в час с человека</caption>
+          <thead>
+            <tr><th scope="col">Зал</th><th scope="col">Вместимость</th><th scope="col">пн–чт</th><th scope="col">пт–вс, праздники</th></tr>
+          </thead>
+          <tbody id="priceRows"></tbody>
+        </table>
+
+        <ul class="disc">
+          <li><span><b>10%</b> — от 3 до 4,5 часов</span></li>
+          <li><span><b>20%</b> — от 5 часов</span></li>
+          <li><span><b>10%</b> — компания от 5 человек</span></li>
+          <li><span><b>20%</b> — компания от 15 человек</span></li>
+          <li><span><b>10%</b> — если у вас день рождения</span></li>
+        </ul>
+        <p class="disc-note">Все скидки суммируются. Оплата наличными, онлайн или по счёту для юридических лиц.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ поводы ============ -->
+  <section id="uses" class="field">
+    <div class="wrap">
+      <h2>С чем приходят к нам</h2>
+      <ul class="uses" aria-label="Поводы прийти в BLACK ROOM">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20.5h14"/><path d="M7 20.5v-5h10v5"/><path d="M8.5 15.5V12h7v3.5"/><path d="M12 12V9.2"/><circle cx="12" cy="7.4" r="1.2"/></svg>
+          <h3>День рождения</h3>
+          <p>Торт на стол, украшение зала и шары</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C6.9 16.6 4 13.4 4 10.1 4 7.7 5.8 6 8 6c1.6 0 3.1 1 4 2.4C12.9 7 14.4 6 16 6c2.2 0 4 1.7 4 4.1 0 3.3-2.9 6.5-8 10.2z"/></svg>
+          <h3>Свидание</h3>
+          <p>Кино на большом экране только для вас двоих</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14l-7 8-7-8z"/><path d="M12 12v6.5"/><path d="M8.5 18.5h7"/></svg>
+          <h3>Девичник</h3>
+          <p>Караоке и украшенный зал под ваш запрос</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7.5" width="16" height="12" rx="2"/><path d="M9.5 7.5V5.8c0-1 .8-1.8 1.8-1.8h1.4c1 0 1.8.8 1.8 1.8v1.7"/><path d="M4 12.5h16"/></svg>
+          <h3>Корпоратив</h3>
+          <p>Зал целиком для команды: игры, караоке, кино</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9.2L12 5l9.5 4.2L12 13.4 2.5 9.2z"/><path d="M6.5 11.5v4.2c0 1.2 2.5 2.3 5.5 2.3s5.5-1.1 5.5-2.3v-4.2"/><path d="M21.5 9.2v5.3"/></svg>
+          <h3>Выпускной</h3>
+          <p>Большой зал для всего класса: караоке и игры</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c3 0 5 2.5 5 5.6 0 3.5-2.6 5.9-5 5.9s-5-2.4-5-5.9C7 5.5 9 3 12 3z"/><path d="M11.3 14.5L12 16l.7-1.5"/><path d="M12 16c-1.8 1.2-1.8 3 .4 5"/></svg>
+          <h3>Детский праздник</h3>
+          <p>Мультфильмы на большом экране и шары</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2.8" width="6" height="10.4" rx="3"/><path d="M5.8 11a6.2 6.2 0 0 0 12.4 0"/><path d="M12 17.2V21"/><path d="M9 21h6"/></svg>
+          <h3>Караоке-вечеринка</h3>
+          <p>Караоке-система, светомузыка и экран</p>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5l1.7 4.8L18.5 11.5l-4.8 1.7L12 18l-1.7-4.8L5.5 11.5l4.8-1.7L12 5z"/><path d="M18.5 16.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>
+          <h3>Гендер-пати</h3>
+          <p>Украшение в вашей теме, игры и караоке</p>
+        </li>
+      </ul>
+      <p class="uses-lead lead">Украсим зал, поможем сервировать стол, пригласим ведущего и фотографа, закажем шары и хлопушки — просто скажите, какой праздник хотите.</p>
+      <p class="vr-line">Шлем виртуальной реальности — <b>495&nbsp;₽ за час</b>.</p>
+    </div>
+  </section>
+
+  <!-- ============ галерея ============ -->
+  <section id="gallery">
+    <div class="wrap">
+      <h2>Как это выглядит</h2>
+      <p class="lead">Живые кадры из наших залов: вечеринки, украшенные праздники, караоке.</p>
+      <div class="gal">
+        <a href="https://blackroomclub.ru/wp-content/uploads/2021/10/IMG_20211011_161833-scaled.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2021/10/IMG_20211011_161833-650x488.jpg" alt="Зал BLACK ROOM — диван и экран" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2023/02/zsSaOqRHoV0.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2023/02/zsSaOqRHoV0-650x433.jpg" alt="Караоке-вечеринка в зале" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2023/04/IMG_20230429_130940-scaled.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2023/04/IMG_20230429_130940-650x488.jpg" alt="Украшенный зал для праздника" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2023/02/JQgfCZEB5xQ.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2023/02/JQgfCZEB5xQ-650x975.jpg" alt="Уютный уголок зала" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2023/02/sU9R0vgOFOrRmfPFXwkzeC4yACQ-R6h85FtpitKJFSE65JTceo2uAs0ZBIJJfNCawPRKhdR8WwcEEGJexFYqtWr-.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2023/02/sU9R0vgOFOrRmfPFXwkzeC4yACQ-R6h85FtpitKJFSE65JTceo2uAs0ZBIJJfNCawPRKhdR8WwcEEGJexFYqtWr--650x433.jpg" alt="Светомузыка в зале" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2018/06/XXL-11.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2018/06/XXL-11-650x433.jpg" alt="Компания в зале BLACK ROOM" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2023/02/IMG_20220205_190639-scaled.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2023/02/IMG_20220205_190639-650x488.jpg" alt="Настольные игры в зале" loading="lazy"></a>
+        <a href="https://blackroomclub.ru/wp-content/uploads/2023/03/dPQkrx6aJQk2.jpg" target="_blank" rel="noopener"><img src="https://blackroomclub.ru/wp-content/uploads/2023/03/dPQkrx6aJQk2-650x660.jpg" alt="Праздничное украшение зала" loading="lazy"></a>
+      </div>
+      <p class="gal-note">Все фото — из залов BLACK ROOM на трёх точках.</p>
+    </div>
+  </section>
+
+  <!-- ============ бронирование ============ -->
+  <section class="book field" id="book">
+    <div class="wrap">
+      <h2>Забронировать зал</h2>
+      <p class="lead">Выберите точку, зал и дату — перезвоним, подтвердим бронь и поможем с остальным: временем, компанией, скидками.</p>
+
+      <div class="book-grid">
+        <form class="form-box" id="bookForm" novalidate>
+          <label>Точка</label>
+          <div class="seg" id="segPoint" role="group" aria-label="Точка"></div>
+
+          <label>Зал этой точки</label>
+          <div class="seg" id="segHall" role="group" aria-label="Зал"></div>
+
+          <label for="f-date">Дата</label>
+          <input type="date" id="f-date">
+
+          <label for="f-phone">Телефон</label>
+          <input type="tel" id="f-phone" autocomplete="tel" placeholder="+7 (___) ___-__-__" required>
+
+          <p class="price-hint" id="priceHint" aria-live="polite"></p>
+
+          <div class="form-submit"><button class="btn" type="submit">Отправить заявку</button></div>
+          <p class="form-fine">Отправляя заявку, вы соглашаетесь на обработку персональных данных.</p>
+          <div class="sent" id="sent" role="status">
+            <b>Заявка отправлена.</b> Перезвоним в течение 15 минут и подтвердим бронь. Если что-то срочное — <a href="tel:+74822788755">(4822) 788-755</a>.
+          </div>
+        </form>
+
+        <div id="contacts"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-in">
+    <span class="foot-brand"><img src="logo.svg" alt="" width="16" height="14">BLACK ROOM — антикинотеатр в Твери</span>
+    <span><a href="tel:+74822788755">(4822) 788-755</a></span>
+    <span><a href="#top">Политика конфиденциальности</a></span>
+  </div>
+  <div class="foot-mark" aria-hidden="true">BLACK ROOM</div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     КОНФИГ ТОЧЕК И ЗАЛОВ — отредактируйте разбивку под реальную.
+     В каждом зале точки: halls — список кодов залов из HALLS.
+     ============================================================ */
+  var POINTS = [
+    { id:"korytkova",    name:"Корыткова, 28б",     addr:"пр-кт Николая Корыткова, 28б", halls:["L","M1","M2","S"] },
+    { id:"chaykovskogo", name:"Чайковского, 84А",   addr:"пр-кт Чайковского, 84А",       halls:["L","M1","M2"]    },
+    { id:"savelyevoj",   name:"Паши Савельевой, 31",addr:"ул. Паши Савельевой, 31",      halls:["M1","M2","S"]    }
+  ];
+
+  var HALLS = {
+    L: {
+      short:"L",
+      title:"Большой зал L",
+      photo:"https://blackroomclub.ru/wp-content/uploads/2025/09/20250918_194039-scaled.jpg",
+      facts:[["33 м²","площадь"],["до 22","человек"]],
+      eq:"Большой экран и кино, караоке с двумя радиомикрофонами, PlayStation и Xbox с Kinect, iPad для управления светом и звуком, светомузыка, диваны с пуфами, настольные игры.",
+      priceW:310, priceE:390, capacity:"до 22 чел."
+    },
+    M1: {
+      short:"M1",
+      title:"Средний зал M1",
+      photo:"https://blackroomclub.ru/wp-content/uploads/2025/09/20250915_132932-scaled.jpg",
+      facts:[["14 м²","площадь"],["до 12","человек"]],
+      eq:"Большой экран и кино, караоке с двумя радиомикрофонами, PlayStation, светомузыка, диваны с пуфами, настольные игры, чай и кофе бесплатно.",
+      priceW:300, priceE:380, capacity:"до 12 чел."
+    },
+    M2: {
+      short:"M2",
+      title:"Средний зал M2",
+      photo:"https://blackroomclub.ru/wp-content/uploads/2023/02/5h2YyMXLq3I-650x433.jpg",
+      facts:[["14 м²","площадь"],["до 12","человек"]],
+      eq:"Большой экран и кино, караоке с двумя радиомикрофонами, PlayStation, светомузыка, диваны с пуфами, настольные игры, чай и кофе бесплатно.",
+      priceW:300, priceE:380, capacity:"до 12 чел."
+    },
+    S: {
+      short:"S",
+      title:"Малый зал S",
+      photo:"https://blackroomclub.ru/wp-content/uploads/2023/02/XjvWRdo2gjk-650x975.jpg",
+      facts:[["до 10","человек"]],
+      eq:"Уютный зал для свидания или небольшой компании: большой экран, караоке с двумя микрофонами, PlayStation, диваны и пуфы, настольные игры, чай и кофе бесплатно.",
+      priceW:270, priceE:350, capacity:"до 10 чел."
+    }
+  };
+  /* ============ конец конфига ============ */
+
+  var PHONE = "(4822) 788-755";
+  var $ = function(id){ return document.getElementById(id); };
+  var RUB = function(n){ return n.toLocaleString("ru-RU") + " ₽"; };
+  var state = { point:POINTS[0].id, hall:POINTS[0].halls[0] };
+
+  function pointById(id){ return POINTS.find(function(p){ return p.id===id; }); }
+  function hallIds(){ return pointById(state.point).halls; }
+
+  /* ---- шапка-облачко: прозрачная на баннере, pill при скролле,
+          видна всегда, содержимое компактнее ---- */
+  (function(){
+    var top = document.querySelector(".top");
+    var ticking = false;
+    function update(){
+      ticking = false;
+      top.classList.toggle("at-top", window.scrollY < 60);
+      top.classList.toggle("pill", window.scrollY >= 60);
+    }
+    window.addEventListener("scroll", function(){
+      if(!ticking){ ticking = true; requestAnimationFrame(update); }
+    }, {passive:true});
+    update();
+  })();
+
+  /* ---- шапка: «сегодня открыты» по реальному расписанию ---- */
+  (function(){
+    var sched = {1:"с 12:00 до 00:00",2:"с 12:00 до 00:00",3:"с 12:00 до 00:00",4:"с 12:00 до 00:00",5:"с 12:00 до 02:00",6:"с 10:00 до 02:00",0:"с 10:00 до 00:00"};
+    var el = $("openText");
+    if(el) el.textContent = "Сегодня открыты " + sched[new Date().getDay()] + ". Ждём вас.";
+  })();
+
+  /* ---- точки: табы + сегмент в форме + контакты ---- */
+  function renderPoints(){
+    var tabs = $("pointTabs");
+    tabs.innerHTML = "";
+    POINTS.forEach(function(p){
+      var b = document.createElement("button");
+      b.className = "point-tab";
+      b.setAttribute("role","tab");
+      b.setAttribute("aria-selected", p.id===state.point ? "true":"false");
+      b.textContent = p.name;
+      b.addEventListener("click", function(){ setPoint(p.id); });
+      tabs.appendChild(b);
+    });
+
+    var seg = $("segPoint");
+    seg.innerHTML = "";
+    POINTS.forEach(function(p){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-pressed", p.id===state.point ? "true":"false");
+      b.textContent = p.name;
+      b.addEventListener("click", function(){ setPoint(p.id); });
+      seg.appendChild(b);
+    });
+  }
+
+  function renderContacts(){
+    var box = $("contacts");
+    box.innerHTML = "";
+    POINTS.forEach(function(p){
+      var d = document.createElement("div");
+      d.className = "contact-item";
+      d.innerHTML = "<h3>"+p.name+"</h3><p>"+p.addr+", Тверь</p>";
+      box.appendChild(d);
+    });
+    var h = document.createElement("div");
+    h.className = "contact-item";
+    h.innerHTML = '<h3>Часы работы</h3><p>пн–чт 12:00–00:00<br>пт 12:00–02:00<br>сб 10:00–02:00<br>вс 10:00–00:00</p>';
+    box.appendChild(h);
+    var c = document.createElement("div");
+    c.className = "contact-item";
+    c.innerHTML = '<h3>Связаться</h3><p><a href="tel:+74822788755">'+PHONE+'</a><br><a href="mailto:info@blackroomclub.ru">info@blackroomclub.ru</a></p>';
+    box.appendChild(c);
+  }
+
+  /* ---- залы: табы, панели, сегмент в форме ---- */
+  function renderHalls(){
+    var ids = hallIds();
+    var tabs = $("hallTabs");
+    tabs.innerHTML = "";
+    ids.forEach(function(h){
+      var b = document.createElement("button");
+      b.className = "hall-tab";
+      b.setAttribute("role","tab");
+      b.setAttribute("aria-selected", h===state.hall ? "true":"false");
+      b.innerHTML = HALLS[h].title.replace(" зал ", "&nbsp;зал&nbsp;");
+      b.addEventListener("click", function(){ setHall(h); });
+      tabs.appendChild(b);
+    });
+
+    var panels = $("hallPanels");
+    panels.innerHTML = "";
+    ids.forEach(function(h){
+      var H = HALLS[h];
+      var facts = H.facts.map(function(f){ return "<span><b>"+f[0]+"</b> "+f[1]+"</span>"; }).join("");
+      var d = document.createElement("div");
+      d.className = "hall-panel" + (h===state.hall ? " active":"");
+      d.setAttribute("role","tabpanel");
+      d.innerHTML =
+        '<div class="hall-photo"><img src="'+H.photo+'" alt="'+H.title+'" loading="lazy"></div>'+
+        '<div class="hall-body">'+
+          '<div class="hall-name">'+H.title+'</div>'+
+          '<div class="hall-facts">'+facts+'</div>'+
+          '<p class="hall-eq">'+H.eq+'</p>'+
+          '<div class="hall-prices">'+
+            '<div class="hall-price"><b>'+RUB(H.priceW)+'</b><small>в час с человека, пн–чт</small></div>'+
+            '<div class="hall-price"><b>'+RUB(H.priceE)+'</b><small>в час с человека, пт–вс и праздники</small></div>'+
+          '</div>'+
+          '<div class="hall-book"><button class="btn" type="button">Забронировать этот зал</button></div>'+
+        '</div>';
+      d.querySelector(".hall-book .btn").addEventListener("click", function(){
+        state.hall = h;
+        renderHalls(); recalcHint();
+        document.getElementById("book").scrollIntoView({behavior:"smooth"});
+      });
+      panels.appendChild(d);
+    });
+
+    var seg = $("segHall");
+    seg.innerHTML = "";
+    ids.forEach(function(h){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-pressed", h===state.hall ? "true":"false");
+      b.textContent = HALLS[h].short;
+      b.addEventListener("click", function(){ setHall(h); });
+      seg.appendChild(b);
+    });
+  }
+
+  function setPoint(id){
+    state.point = id;
+    var ids = hallIds();
+    if(ids.indexOf(state.hall) === -1) state.hall = ids[0];
+    renderPoints(); renderHalls(); recalcHint();
+  }
+  function setHall(h){
+    state.hall = h;
+    renderHalls(); recalcHint();
+  }
+
+  /* ---- таблица цен из конфига ---- */
+  (function(){
+    var rows = $("priceRows");
+    Object.keys(HALLS).forEach(function(h){
+      var H = HALLS[h];
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>"+H.title+"</td><td>"+H.capacity+"</td>"+
+        "<td><b>"+RUB(H.priceW)+"</b></td><td><b>"+RUB(H.priceE)+"</b></td>";
+      rows.appendChild(tr);
+    });
+  })();
+
+  /* ---- форма ---- */
+  var dateEl = $("f-date"), phoneEl = $("f-phone"), hint = $("priceHint");
+  var tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  dateEl.value = tomorrow.toISOString().slice(0,10);
+
+  function isWeekend(v){
+    if(!v) return false;
+    var d = new Date(v+"T12:00:00").getDay();
+    return d===0 || d===5 || d===6;
+  }
+  function recalcHint(){
+    var H = HALLS[state.hall];
+    var p = isWeekend(dateEl.value) ? H.priceE : H.priceW;
+    var when = isWeekend(dateEl.value) ? "пт–вс и праздники" : "пн–чт";
+    hint.innerHTML = "<b>"+H.title+"</b>, "+when+": "+RUB(p)+" в час с человека. "+
+      "Скидки за длительность, компанию и день рождения суммируются — посчитаем при подтверждении.";
+  }
+  dateEl.addEventListener("input", recalcHint);
+
+  $("bookForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    if(!phoneEl.value.trim()){
+      phoneEl.focus();
+      phoneEl.placeholder = "Укажите телефон, чтобы мы перезвонили";
+      return;
+    }
+    $("sent").style.display = "block";
+    $("sent").scrollIntoView({behavior:"smooth", block:"nearest"});
+  });
+
+  /* ---- старт ---- */
+  renderPoints(); renderContacts(); renderHalls(); recalcHint();
+})();
+</script>
+</body>
+</html>
